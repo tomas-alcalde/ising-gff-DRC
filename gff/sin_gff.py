@@ -1,8 +1,5 @@
 """
-Sampling and plotting of sin(alpha * GFF) for a Dirichlet GFF on the unit square.
-
-The sign of the field is the continuum analogue of an Ising spin configuration,
-which show2d_spin plots.
+Sampling and plotting of sin(alpha * GFF) for a GFF on the unit square.
 """
 
 import numpy as np
@@ -13,7 +10,7 @@ from gff_fft_zero import gff
 
 def sin_gff(N, alpha, show2d=False, show2d_spin=False, show3d=False):
     """
-    Sample sin(alpha * GFF) for a Dirichlet GFF on the unit square
+    Sample sin(alpha * GFF) for a GFF on the unit square, with plotting options
     """
     
     field = np.sin(alpha * gff(N))

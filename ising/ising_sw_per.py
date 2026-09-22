@@ -1,9 +1,9 @@
 """
 Swendsen-Wang sampling of the Ising model on the N x N torus.
+By default, sampled at the critical temperature
 
 Also holds the grid utilities shared with the other boundary conditions: bond_grid
-embeds vertices and bonds on a single array, and label_bond_grid labels its clusters.
-Plotting helpers for sampled spin configurations live here too.
+and label_bond_grid. Plotting helpers for spin configurations live here too.
 """
 
 import numpy as np
@@ -18,12 +18,11 @@ BOND_STRUCTURE = np.array([[0, 1, 0],
 
 def bond_grid(h_bonds, v_bonds, pad=0):
     """
-    Embeds vertices and edges on the same grid
-     
-    Vertices sit at even row/column indices, and each bond sits at the odd index directly 
-    between the two vertices it connects. A cell is 0 iff. it is a closed bond
+    Embeds vertices and edges on the same grid. Vertices sit at even row/column indices, and 
+    each bond sits at the odd index between the two vertices it connects
+    A cell is 0 iff. it is a closed bond
 
-    h_bonds is N x (N-1) (bond to the right of vertex), 
+    h_bonds is N x (N-1) (bond to the right of vertex) 
     v_bonds is (N-1) x N (bond to the bottom of vertex)
 
     The padding reserves all-zero cells on every side, to implement boundary conditions eventually
@@ -42,11 +41,11 @@ def bond_grid(h_bonds, v_bonds, pad=0):
 
 def label_bond_grid(grid, N, pad=0):
     """
-    labeled_grid labels the clusters of a grid. Each cell (whether edge or vertex) holds 
-    the id of its unique cluster, including isolated vertices. Closed bonds have label zero. 
+    Labels the clusters of a grid (i.e. bond percolation model) 
+    Each cell (whether edge or vertex) holds the id of its unique cluster, including isolated vertices
+    Closed bonds have label zero 
 
     vertex_labels is the (N, N) sub-array of labeled_grid holding only vertex id's
-
     n_labels is the number of clusters, including isolated vertices
     """
 
@@ -57,8 +56,8 @@ def label_bond_grid(grid, N, pad=0):
 
 class Spins:
     """
-    Samples the Ising model on the N x N torus (periodic boundary conditions)
-    using the Swendsen-Wang algorithm. Default J is the critical temperature.
+    Samples the Ising model on the N x N torus 
+    Default J is the critical temperature.
     """
 
     def __init__(self, N, J = 0.5*np.log(1+np.sqrt(2)), n_iter=1e2, snaps=1):
@@ -114,7 +113,6 @@ class Spins:
         N = self.N
         h_bonds, v_bonds, wrap_h_bonds, wrap_v_bonds = self._bonds(state)
 
-        # Embed vertices and bonds using bond_grid() and label_bond_grid() explained above
         grid = bond_grid(h_bonds, v_bonds)
         labeled_grid, vertex_labels, n_labels = label_bond_grid(grid, N)
 
@@ -191,7 +189,6 @@ def plot_bare(state):
 def plot_bare_triple(state1, state2, state3):
     """
     Plots three fixed samples next to each other, with no title or text.
-
     Used for plotting the XOR-Ising model with its two respective Ising models (see xor.py)
     """
 

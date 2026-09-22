@@ -1,8 +1,6 @@
 """
-Sampling of the XOR-Ising model, the product of two independent Ising models.
-
-Provides the periodic and + boundary condition versions, each of which draws two
-independent Swendsen-Wang samples and multiplies them spin by spin.
+Sampling of the XOR-Ising model, the product of two independent Ising models
+Provides the periodic and + boundary condition versions
 """
 
 import numpy as np
@@ -12,7 +10,9 @@ from ising_sw_plus import SpinsPlusBC
 
 def xor_per(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, show=False, multishow=False):
     """
-    Sample the XOR-Ising model on the N x N torus (periodic boundary conditions).
+    Sample the XOR-Ising model on the N x N torus 
+
+    multishow plots both instances of the underlying Ising models next to the corresponding XOR
     """
 
     s1 = Spins(N=N, J=J, n_iter=n_iter)
@@ -29,7 +29,9 @@ def xor_per(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, show=False, multishow=Fal
 
 def xor_plus(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, show=False, multishow=False):
     """
-    Sample the XOR-Ising model on the N x N square with + boundary conditions.
+    Sample the XOR-Ising model on the N x N square with + boundary conditions
+
+    multishow plots both instances of the underlying Ising models next to the corresponding XOR
     """
 
     s1 = SpinsPlusBC(N=N, J=J, n_iter=n_iter)

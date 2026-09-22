@@ -1,10 +1,10 @@
 """
-Sampling and plotting of the XOR-Ising height function on the N x N square.
+Sampling and plotting of the associated height function on the N x N squarelattice
 
-The height function is reconstructed from the doubled-FK coupling of currents.py: it
-is constant on clusters, so the reconstruction is a breadth-first search over the
-bipartite graph of incident primal (omega) and dual (DRC) clusters, started from the
-wired boundary cluster where h = 0.
+The height function is reconstructed from the coupling of currents.py: it
+is constant on the clusters of omega and DRC, so the reconstruction is a breadth-first search 
+over the bipartite graph of incident omega and DRC clusters,
+started from the wired boundary cluster where h = 0.
 """
 
 import sys
@@ -23,19 +23,16 @@ from currents import sample_traces
 
 def sample_height(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2):
     """
-    Sample the XOR-Ising height function on the N x N square.
+    Sample the height function on the N x N square.
 
-    Here (1) tau is the product of two independent + b.c. Ising models (see xor.py)
-    (2) omega is their doubled-FK trace, both on the thickened (N+2) x (N+2) grid
-    (3) DRC is Percolation.dual() of omega, on the (N+1) x (N+1) grid of bounded faces
-    (4) tau* is an iid symmetric sign per DRC cluster.
-
-    (1)-(3) all come straight out of currents.sample_traces.
+    tau is the product of two independent + b.c. Ising models (see xor.py)
+    omega is their doubled-FK trace, both on the thickened (N+2) x (N+2) grid
+    DRC is Percolation.dual() of omega, on the (N+1) x (N+1) grid of bounded faces
+    tau* is an iid symmetric sign per DRC cluster.
 
     The height function has h = 0 on the wired boundary and gradient
           h(v) - h(v*) = 0.5 * tau(v) * tau*(v*)
     across every incident primal/dual pair (i.e. corner).
-    In particular, h is constant on every cluster!
     """
 
     M = N + 2
@@ -67,7 +64,7 @@ def sample_height(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2):
     #   block 1 = omega_labels[:-1,  1:] -> label of primal vertices to top-right
     #   block 2 = omega_labels[ 1:, :-1] -> label of primal vertices to bottom-left
     #   block 3 = omega_labels[ 1:,  1:] -> label of primal verties to bottom-right 
-    #
+
     # faces has the same shape, but the four blocks are identical and 
     # such that faces[k] is the DRC label of the dual vertex whose corner is corners[k]
     # i.e. (corners[k], faces[k]) is one incident (primal corner, dual face) pair.
@@ -141,7 +138,7 @@ def plot_height(h_primal, h_dual):
 def _joint_grid(h_primal, h_dual):
     """
     Mix the primal and dual height functions onto a single (2M-1) x (2M-1) grid:
-    primal vertices land on the even indices, dual vertices, on the odd ones.
+    primal vertices land on the even indices, dual vertices on the odd indices.
 
     The leftover cells are the midpoints of the primal (equiv. dual) edges, where h is
     not defined; interpolated here so the field has no gaps.
@@ -176,7 +173,7 @@ def plot_height_joint(h_primal, h_dual):
 
 def plot_height_joint_3d(h_primal, h_dual):
     """
-    Same joint field as plot_height_joint, as a 3D bar plot
+    Same as plot_height_joint, but as a 3D bar plot
     """
 
     joint = _joint_grid(h_primal, h_dual)

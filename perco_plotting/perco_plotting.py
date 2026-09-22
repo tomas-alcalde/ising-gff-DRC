@@ -1,9 +1,8 @@
 """
-Handling and plotting of bond percolations on the square lattice.
+Handling and plotting of bond percolations on the square lattice
 
-The Percolation class stores a configuration as its horizontal and vertical bond
-arrays, and knows how to take its geometric dual, draw itself, and draw the cluster
-of a given vertex. It is the common currency of the current and height samplers.
+The Percolation class stores a configuration and its geometric dual
+Allows plotting of either, and of the cluster of a given vertex
 """
 
 import numpy as np
@@ -11,10 +10,9 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from scipy.ndimage import label
 
-
 def _format_ax(ax):
     """
-    Strips an axis down to the bare lattice drawing.
+    Common formatting for all plots
     """
 
     ax.set_aspect("equal")
@@ -24,19 +22,14 @@ def _format_ax(ax):
 
 class Percolation:
     """
-    Aid for handling and plotting percolation models and their duals, on the square lattice
-    
     Enforces N x N grid, otherwise prompts error
+
     h_bonds is N x (N-1) array of Booleans representing state of bond to the right of vertex
     v_bonds is (N-1) x N array of Booleans representing state of bond to the bottom of vertex
+    origin is the (x, y) position of vertex [0, 0], used only for Percolation.dual()
 
-    origin is the (x, y) position of vertex [0, 0], which is what lets a dual state, whose
-    vertices sit at the centres of the primal faces, plot in its true place. See dual().
-
-    Note the index/coordinate discrepancy: entry [y, x] of h_bonds/v_bonds corresponds to
-    vertex (x, y), i.e. axis 0 (rows) is treated as the y-coordinate and axis 1 (columns) as
-    the x-coordinate. This matches how the underlying bond arrays are naturally indexed as
-    [row, col] elsewhere (e.g. Ising state arrays).
+    Note the index/coordinate discrepancy: entry [y, x] of h_bonds/v_bonds corresponds to vertex (x, y) 
+    That is, rows (axis 0) is treated as the y-coordinate and columns (axis 1) as the x-coordinate 
     """
 
     def __init__(self, h_bonds, v_bonds, origin=(0.0, 0.0)):
@@ -74,11 +67,9 @@ class Percolation:
     def dual(self):
         """
         Returns the geometric dual as its own Percolation instance, on the (N-1) x (N-1) grid
-        of bounded faces: dual vertex [a, b] is the centre of the primal face with top-left
-        corner [a, b], hence the (0.5, 0.5) shift of the origin. Since the dual is a genuine
-        Percolation state, plot it and cluster it with the ordinary bonds_to_lines/plot_cluster.
+        of bounded faces. Note shift of origin is by +(0.5, 0.5) 
 
-        Not involutive: every dual discards that outer ring, so N drops by one each time.
+        Not involutive: every dual discards that outer ring, so N drops by one each time
         """
 
         x0, y0 = self.origin
@@ -87,9 +78,9 @@ class Percolation:
 
     def plot(self, show_primal=True, show_dual=False, main_color="black", second_color="blue"):
         """
-        Plots the primal and/or dual percolation.
+        Plots the primal and/or dual percolation, in main_color. 
 
-        If both plotted, the dual model shows in blue
+        If both plotted, the dual model is shown in second_color. 
         """
 
         fig, ax = plt.subplots(figsize=(4,4))
@@ -107,12 +98,10 @@ class Percolation:
 
     def plot_cluster(self, target=None):
         """
-        Plot the *primal* cluster intersecting a given vertex, defaults to centre vertex.
+        Plot the *primal* cluster intersecting a given vertex, defaults to centre vertex
 
-        target is an (x, y) coordinate pair, following the class convention above: it indexes
-        the bond arrays as [y, x], so vertex (x, y) sits at labeled_grid[2*y, 2*x].
-        When implemented with wired b.c., sample boundary cluster by setting target=(0,0),
-        i.e. bottom-left vertex.
+        target is an (x, y) coordinate pair, following the class convention above
+        Sample boundary cluster by setting target = (0,0)
         """
 
         if target is None:
@@ -124,7 +113,9 @@ class Percolation:
         grid[::2, 1::2] = self.h_bonds
         grid[1::2, ::2] = self.v_bonds
 
-        structure = np.array([[0,1,0], [1,1,1], [0,1,0]])
+        structure = np.array([[0,1,0],
+                              [1,1,1],
+                              [0,1,0]])
         labeled_grid, num_cluster = label(grid, structure=structure)
 
         cluster_id = labeled_grid[2*ty, 2*tx]

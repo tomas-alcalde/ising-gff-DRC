@@ -1,11 +1,12 @@
 """
-Random current representations of the Ising model, sampled through the FK coupling.
+Random current representations of the Ising model, along with related percolation models
 
-Single currents (SRC) and the double current (DRC) are built out of Swendsen-Wang
-samples of the + boundary condition Ising model, sprinkled with independent
-Bernoulli percolation. Each current is returned as its trace, odd part and even part,
-as Percolation states on the dual, alongside the doubled-FK configuration omega and
-the XOR-Ising spin field tau. Plotting routines for all of these live here too.
+All models are built out of Swendsen-Wang samples of the + boundary condition Ising model, 
+sprinkled with independent Bernoulli percolation. 
+Each current is returned as its trace, odd part and even part.
+
+IMPORTANT NOTE: When off-critical temperature, currents are sampled at the dual 
+temperature J^* satisfying exp(-2J^*) = tanh(J).
 """
 
 import sys
@@ -44,9 +45,6 @@ def _sprinkle(N, p):
 def _even_part(trace, odd):
     """
     Given the odd part of a current (SRC or DRC) and its trace, find its even trace.
-
-    Note sprinkling is done on every edge, not just on the complement of the odd part,
-    so this is adjusted for.
     """
 
     return Percolation(trace.h_bonds | ~odd.h_bonds,
@@ -56,11 +54,7 @@ def _even_part(trace, odd):
 def _single_current(prefix, xi, eta):
     """
     Trace / odd part / even part of the SRC.
-
-    The dual of SRC is sampled first, then passed through Percolation.dual()
-
-    IMPORTANT NOTE: When off-critical, the SRC is sampled at the dual temperature J^*
-    satisfying exp(-2J) = tanh(J^*).
+    Obtained by first sampling the dual of SRC, then passed through Percolation.dual()
     """
 
     xi_h, xi_v = xi
@@ -74,18 +68,14 @@ def _single_current(prefix, xi, eta):
 
 
 def sample_traces(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, omega=False, SRC=False, DRC=False):
-    r"""
+    """
     Sample the doubled-FK model omega, the trace of the SRC, and/or the trace of the DRC.
-
-    Returns a dict of Percolation states, keyed by "SRC"/"SRC2" (the single currents),
-    "omega", and "DRC", plus the (primal) XOR-Ising spin field under "tau".
+    Returns a dict of Percolation states, keyed by "SRC", "SRC2", "omega", and "DRC". 
+    Also returns the (primal) XOR-Ising spin field under "tau", used in height.py
 
     The setup is such that trace(DRC) = trace(SRC) u trace(SRC2).
     The odd parts compose as odd(DRC) = odd(SRC) \Delta odd(SRC2),
     and even(DRC) = ((even(SRC) u even(SRC2)) \ odd(DRC)) u (odd(SRC) n odd(SRC2)).
-
-    IMPORTANT NOTE: Again, when off-critical, the SRC and DRC are sampled at the dual
-    temperature J^*.
     """
 
     if not (SRC or DRC or omega):
@@ -120,9 +110,6 @@ def sample_traces(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, omega=False, SRC=Fa
         # DRC is exactly the dual of omega
         states["DRC"] = states["omega"].dual()
 
-        # The XOR-Ising spin field tau = s1 * s2
-        # This is the one entry of the returned dict that is a spin array rather than a Percolation state.
-        # Done here to import into height.py later (otherwise unused)
         t_sample = s1_sample * s2_sample
         tau = np.ones((N+2, N+2), dtype=int)
         tau[1:N+1, 1:N+1] = t_sample
@@ -137,7 +124,7 @@ def sample_traces(N, J=0.5*np.log(1+np.sqrt(2)), n_iter=1e2, omega=False, SRC=Fa
 
 def _src_prefixes(states):
     """
-    Single currents present in a states dict, in sampling order
+    Check which single currents present in the states dict, in sampling order
     """
 
     return [prefix for prefix in ("SRC", "SRC2") if f"{prefix}_dual" in states]

@@ -1,7 +1,6 @@
 """
-Sampling and plotting of cos(alpha * GFF) for a Dirichlet GFF on the unit square.
+Sampling and plotting of cos(alpha * GFF) for a GFF on the unit square.
 
-The sign of the field is the continuum analogue of an Ising spin configuration,
 which show2d_spin plots.
 """
 
@@ -13,7 +12,7 @@ from gff_fft_zero import gff
 
 def cos_gff(N, alpha, show2d=False, show2d_spin=False, show3d=False):
     """
-    Sample cos(alpha * GFF) for a Dirichlet GFF on the unit square.
+    Sample cos(alpha * GFF) for a GFF on the unit square, with plotting options
     """
 
     field = np.cos(alpha * gff(N))

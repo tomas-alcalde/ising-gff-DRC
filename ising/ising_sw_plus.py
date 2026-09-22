@@ -2,7 +2,7 @@
 Swendsen-Wang sampling of the Ising model on the N x N square with + boundary conditions.
 
 Specialises the periodic sampler of ising_sw_per by thickening the lattice into an
-(N+2) x (N+2) grid whose outer ring is the wired boundary, pinned to the + spin.
+(N+2) x (N+2) grid whose outer ring is pinned to the + spin.
 """
 
 import numpy as np
@@ -14,7 +14,7 @@ from ising_sw_per import Spins, plot_bare, bond_grid, label_bond_grid
 class SpinsPlusBC(Spins):
     """
     Samples the Ising model on the N x N square with + boundary conditions
-    using the Swendsen-Wang algorithm. Default J is the critical temperature.
+    Default J is the critical temperature
     """
 
     def agree(self, state):
@@ -37,11 +37,8 @@ class SpinsPlusBC(Spins):
         top_cap = padded[0, 1:N+1] == padded[1, 1:N+1]
         left_cap = padded[1:N+1, 0] == padded[1:N+1, 1]
 
-        # Thicken into an (N+2) x (N+2) vertex grid: real vertices sit at indices
-        # 1..N, and the outer ring is the wired boundary condition.
-        # This makes h_agree/v_agree match Percolation's h_bonds/v_bonds convention
-        # exactly, but for an (N+2) x (N+2) grid, so target=(0, 0) in
-        # Percolation.plot_cluster picks out the wired boundary cluster. See perco_plotting.py.
+        # Thicken into an (N+2) x (N+2) vertex grid, where the outer ring is the wired boundary condition.
+        # Thickening is convenient for plotting the boundary cluster of wired percolation models, see perco_plotting.py
         M = N + 2
         h_agree = np.zeros((M, M - 1), dtype=bool)
         h_agree[0, :] = True

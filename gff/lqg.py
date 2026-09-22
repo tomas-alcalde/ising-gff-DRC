@@ -1,7 +1,5 @@
 """
 Sampling and plotting of the Liouville quantum gravity measure on the unit square.
-
-The density exp(gamma * GFF) is taken with respect to a Dirichlet GFF.
 """
 
 import numpy as np
@@ -11,7 +9,7 @@ from gff_fft_zero import gff
 
 def lqg(gamma, N, show2d=False, show3d=False):
     """ 
-    Sample the Liouville quantum gravity measure exp(gamma * GFF) on the unit square.
+    Sample the Liouville quantum gravity measure exp(gamma * GFF) on the unit square, with plotting options
     """
     
     field = np.exp(gamma * gff(N))
