@@ -60,7 +60,7 @@ class Spins:
     Default J is the critical temperature.
     """
 
-    def __init__(self, N, J = 0.5*np.log(1+np.sqrt(2)), n_iter=1e2, snaps=1):
+    def __init__(self, N, J = 0.5*np.log(1+np.sqrt(2)), n_iter=1e3, snaps=1):
         self.N = N
         self.J = J
         self.n_iter = int(n_iter)

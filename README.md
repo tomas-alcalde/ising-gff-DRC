@@ -7,18 +7,27 @@ The behaviour and usage of each `.py` file is explained within.
 
 Let me know if you spot any mistakes!
 
+> [!NOTE]
+> **TODO:** Revisit for Ashkin-Teller. The main difference is sampling the *interacting* Ising models,
+> the rest of the scripts need minor adjustments (if at all). Will also include a numerical computation of the variance of the height function. 
+
 ## Directory structure
 
 ### [`ising/`](ising/)
 
-Scripts for the Ising (and XOR-Ising) model with plus or periodic boundary
-conditions, using the Swendsen–Wang algorithm.
+Scripts for the Ising (and XOR-Ising) model with periodic, plus, alternating, block
+or random boundary conditions, using the Swendsen–Wang algorithm.
 
 - [`ising_sw_per.py`](ising/ising_sw_per.py) — Swendsen–Wang sampler on the `N x N`
   torus, plus other the grid utilities and plotting helpers shared throughout.
 - [`ising_sw_plus.py`](ising/ising_sw_plus.py) — Swendsen–Wang sampler on the `N x N`
   square lattice with `+` boundary conditions.
-- [`xor.py`](ising/xor.py) — Convenient plotting of the XOR-Ising model, the pointwise product
+- [`ising_sw_plus_minus.py`](ising/ising_sw_plus_minus.py) — Swendsen–Wang sampler on the `N x N`
+  square lattice with alternating `+/-` boundary conditions on every vertex.
+- [`ising_sw_plus_minus_blocks.py`](ising/ising_sw_plus_minus_blocks.py) — As above, with the boundary conditions alternating on blocks of length `L`.
+- [`ising_sw_perco.py`](ising/ising_sw_perco.py) — As above, with i.i.d. Bernoulli(`p`) boundary
+  spins.
+- [`xor.py`](ising/xor.py) — Convenient plotting of the product
   of two independent Ising models.
 
 ### [`gff/`](gff/)

@@ -178,7 +178,7 @@ def plot_parities(states, SRC=False, DRC=False):
 
 if __name__ == "__main__":
     omega, SRC, DRC = True, True, True
-    states = sample_traces(N=100, omega=omega, SRC=SRC, DRC=DRC) 
-    plot_traces(states, omega=omega, SRC=SRC, DRC=DRC)
-    plot_omega_bdy(N=100)
+    states = sample_traces(N=400, omega=omega, SRC=SRC, DRC=DRC) 
+    #plot_traces(states, omega=omega, SRC=SRC, DRC=DRC)
+    #plot_omega_bdy(N=100)
     plot_parities(states, SRC=SRC, DRC=DRC)
