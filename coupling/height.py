@@ -200,7 +200,7 @@ def plot_height_joint_3d(h_primal, h_dual):
 
 
 if __name__ == "__main__":
-    h_primal, h_dual = sample_height(N=100)
+    h_primal, h_dual = sample_height(N=200, J=2)
     plot_height(h_primal, h_dual)
     plot_height_joint(h_primal, h_dual)
     plot_height_joint_3d(h_primal, h_dual)   # More than N=100 is too much for 3d plot
